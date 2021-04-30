@@ -234,7 +234,7 @@
 
         svg_axis.append("image")
             .attr("style", "background-position: center center; object-fit: contain; height: 400px; position:relative;")
-            .attr("xlink:href", "http://localhost:9001/assets/mood-vis.png")
+            .attr("xlink:href", "https://chunthebear.github.io/covid19-mood-vis//assets/mood-vis.png")
 
         let y_scale = d3.scaleLinear()
                   .domain([-50, 50])
@@ -288,7 +288,7 @@
         }
 
         // Data processing for context
-        d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+        d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/context.csv").then(function(data) {
             let physical_activity_arr = []
             for(j = 0; j < data.length; j++){
                 let option = data[j].physical_activity
@@ -383,7 +383,7 @@
         
 
         // Data processing for demograhics
-        d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+        d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
 
             cols = ["sex", "age", "family_members",  "residence_type", "residence_rooms", "open_spaces", "income", "covid_residence"];//, "covid"];
             
@@ -521,17 +521,17 @@
         d3.select("div.screen").select("div.background")
             .append("img")
             .attr("style", "background-position: center 40%; object-fit: cover; width: 700px; height: 350px;")
-            .attr("src", "http://localhost:9001/assets/apartment-3-room.jpg")
+            .attr("src", "https://chunthebear.github.io/covid19-mood-vis//assets/apartment-3-room.jpg")
                     
         d3.select("div.screen").select("div.person")
             .append("img")
             .attr("style", "background-position: center center; object-fit: contain; height: 100px; position:relative; left:320px; top:140px;")
-            .attr("src", "http://localhost:9001/assets/context/person.png")
+            .attr("src", "https://chunthebear.github.io/covid19-mood-vis//assets/context/person.png")
 
         d3.select("div.screen").select("div.addition")
             .append("img")
             .attr("style", "background-position: center center; object-fit: contain; height: 200px; position:relative; left:300px; top:150px;")
-            .attr("src", "http://localhost:9001/assets/balcony-flipped.png")
+            .attr("src", "https://chunthebear.github.io/covid19-mood-vis//assets/balcony-flipped.png")
 
     </script>
 
@@ -543,7 +543,7 @@
         };
 
         var hide = function(){
-            $("div.person > img").attr("src", "http://localhost:9001/assets/context/person.png");
+            $("div.person > img").attr("src", "https://chunthebear.github.io/covid19-mood-vis//assets/context/person.png");
         };
 
 
@@ -582,26 +582,26 @@
             let social_contact = document.querySelector("#social_contact").value
 
             if (caller=="physical_activity"){
-                if (physical_activity=="0-2") show("http://localhost:9001/assets/context/running-slowerer.gif");
-                else if (physical_activity=="2-4") show("http://localhost:9001/assets/context/running-slower.gif");
-                else if (physical_activity=="4-6") show("http://localhost:9001/assets/context/running.gif");
-                else if (physical_activity=="6-8") show("http://localhost:9001/assets/context/running-faster.gif");
-                else if (physical_activity=="8+") show("http://localhost:9001/assets/context/running-fasterer.gif");
+                if (physical_activity=="0-2") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/running-slowerer.gif");
+                else if (physical_activity=="2-4") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/running-slower.gif");
+                else if (physical_activity=="4-6") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/running.gif");
+                else if (physical_activity=="6-8") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/running-faster.gif");
+                else if (physical_activity=="8+") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/running-fasterer.gif");
             }
             else if (caller=="sleep"){
-                if (sleep=="0_lot_less" || sleep=="1_less") show("http://localhost:9001/assets/context/sleeping-less.png");
-                else if (sleep=="2_same") show("http://localhost:9001/assets/context/sleeping.gif");
-                else if (sleep=="4_lot_more" || sleep=="3_more") show("http://localhost:9001/assets/context/sleeping-more.gif");
+                if (sleep=="0_lot_less" || sleep=="1_less") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/sleeping-less.png");
+                else if (sleep=="2_same") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/sleeping.gif");
+                else if (sleep=="4_lot_more" || sleep=="3_more") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/sleeping-more.gif");
             }
             else if (caller=="work_changed"){
-                if (work_changed =="reduce") show("http://localhost:9001/assets/context/work-slower.gif");
-                else if (work_changed =="no_change") show("http://localhost:9001/assets/context/work.gif");
-                else if (work_changed =="increase") show("http://localhost:9001/assets/context/work-faster.gif");
+                if (work_changed =="reduce") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/work-slower.gif");
+                else if (work_changed =="no_change") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/work.gif");
+                else if (work_changed =="increase") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/work-faster.gif");
             }
             else if (caller=="social_contact"){
-                if (social_contact=="1_less") show("http://localhost:9001/assets/context/socialcontact-slower.gif");
-                else if (social_contact=="2_same") show("http://localhost:9001/assets/context/socialcontact.gif");
-                else if (social_contact=="3_more") show("http://localhost:9001/assets/context/socialcontact-faster.gif");
+                if (social_contact=="1_less") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/socialcontact-slower.gif");
+                else if (social_contact=="2_same") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/socialcontact.gif");
+                else if (social_contact=="3_more") show("https://chunthebear.github.io/covid19-mood-vis//assets/context/socialcontact-faster.gif");
             }
 
             // context vars
@@ -612,37 +612,37 @@
             let residence_rooms = document.querySelector("#residence_rooms").value
             let open_spaces = document.querySelector("#open_spaces").value
             if (residence_type=="apartment"&&residence_rooms==1){
-                $("div.background > img").attr("src","http://localhost:9001/assets/apartment-1-room.jpg");
+                $("div.background > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/apartment-1-room.jpg");
             }
             else if (residence_type=="apartment"&&residence_rooms==2){
-                $("div.background > img").attr("src","http://localhost:9001/assets/apartment-2-room.jpg");
+                $("div.background > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/apartment-2-room.jpg");
             }
             else if (residence_type=="apartment"&&residence_rooms==3 || residence_type=="apartment"&&residence_rooms=="3+"){
-                $("div.background > img").attr("src","http://localhost:9001/assets/apartment-3-room.jpg");
+                $("div.background > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/apartment-3-room.jpg");
             }
             else if (residence_type=="house"&& (residence_rooms==1||residence_rooms==2)){
                 if (open_spaces=="yard,balcony" || open_spaces=="yard") {
-                    $("div.background > img").attr("src","http://localhost:9001/assets/house-1-2-room-yard.jpg");
+                    $("div.background > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/house-1-2-room-yard.jpg");
                 } else {
-                    $("div.background > img").attr("src","http://localhost:9001/assets/house-1-2-room.jpg");
+                    $("div.background > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/house-1-2-room.jpg");
                 }
             }
             else if (residence_type=="house"&& (residence_rooms==3||residence_rooms=="3+")){
                 if (open_spaces=="yard,balcony" || open_spaces=="yard") {
-                    $("div.background > img").attr("src","http://localhost:9001/assets/house-3-room-yard.jpg");
+                    $("div.background > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/house-3-room-yard.jpg");
                 } else {
-                    $("div.background > img").attr("src","http://localhost:9001/assets/house-3-room.jpg");
+                    $("div.background > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/house-3-room.jpg");
                 }
             }
             else if (residence_type=="other"){
-                $("div.background > img").attr("src","http://localhost:9001/assets/milky-way.gif");
+                $("div.background > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/milky-way.gif");
             }
             
             if (open_spaces=="balcony"){
-                $("div.addition > img").attr("src","http://localhost:9001/assets/balcony-flipped.png");
+                $("div.addition > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/balcony-flipped.png");
             }
             else if (open_spaces=="yard,balcony"){
-                $("div.addition > img").attr("src","http://localhost:9001/assets/balcony-flipped.png");
+                $("div.addition > img").attr("src","https://chunthebear.github.io/covid19-mood-vis//assets/balcony-flipped.png");
 
             }
             else if (open_spaces=="no" || open_spaces=="other" || open_spaces=="yard" ){
@@ -668,7 +668,7 @@
             if (document.getElementById("correlated").checked == false){
 
                 if (caller == "sex"){
-                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (sex==data[j].sex){
                                 selected.push(parseInt(data[j].id))
@@ -678,7 +678,7 @@
                     update_mood_from_demo(selected);
                 }
                 else if (caller == "age"){
-                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (age==data[j].age){
                                 selected.push(parseInt(data[j].id))
@@ -688,7 +688,7 @@
                     update_mood_from_demo(selected);
                 }
                 else if (caller == "family_members"){
-                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (family_members==data[j].family_members){
                                 selected.push(parseInt(data[j].id))
@@ -698,7 +698,7 @@
                     update_mood_from_demo(selected);
                 }
                 else if (caller == "residence_type"){
-                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (residence_type==data[j].residence_type){
                                 selected.push(parseInt(data[j].id))
@@ -708,7 +708,7 @@
                     update_mood_from_demo(selected);
                 }
                 else if (caller == "residence_rooms"){
-                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (residence_rooms==data[j].residence_rooms){
                                 selected.push(parseInt(data[j].id))
@@ -718,7 +718,7 @@
                     update_mood_from_demo(selected);
                 }
                 else if (caller == "open_spaces"){
-                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (open_spaces==data[j].open_spaces){
                                 selected.push(parseInt(data[j].id))
@@ -728,7 +728,7 @@
                     update_mood_from_demo(selected);
                 }
                 else if (caller == "income"){
-                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (income==data[j].income){
                                 selected.push(parseInt(data[j].id))
@@ -738,7 +738,7 @@
                     update_mood_from_demo(selected);
                 }
                 else if (caller == "covid_residence"){
-                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (covid_residence==data[j].covid_residence){
                                 selected.push(parseInt(data[j].id))
@@ -752,7 +752,7 @@
                 // Selected is different here! 
                 //select = [[]]
                 else if (caller == "physical_activity"){
-                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/context.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (physical_activity==data[j].physical_activity){
                                 let id = parseInt(data[j].id)
@@ -764,7 +764,7 @@
                     update_mood_from_context(selected);
                 }
                 else if (caller == "sleep"){
-                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/context.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (sleep==data[j].sleep){
                                 let id = parseInt(data[j].id)
@@ -776,7 +776,7 @@
                     update_mood_from_context(selected);
                 }
                 else if (caller == "work_changed"){
-                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/context.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (work_changed==data[j].work_changed){
                                 let id = parseInt(data[j].id)
@@ -788,7 +788,7 @@
                     update_mood_from_context(selected);
                 }
                 else if (caller == "social_contact"){
-                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/context.csv").then(function(data) {
                         for(j = 0; j < data.length; j++){
                             if (social_contact==data[j].social_contact){
                                 let id = parseInt(data[j].id)
@@ -822,7 +822,7 @@
                 }
                 
             
-                d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
 
                     loop1: 
                     for(j = 0; j < data.length; j++){
@@ -854,7 +854,7 @@
 
                 if (!context_vars_selected.length == 0){                
                     let filtered_selected = []
-                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                    d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/context.csv").then(function(data) {
 
                         loop1: 
                         for(j = 0; j < data.length; j++){
@@ -895,7 +895,7 @@
 
     <script>
         var update_mood_from_demo = function(participants){
-            d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+            d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/participants_sampled.csv").then(function(data) {
                 let num = participants.length;
                 let valence = 0;
                 let arousal = 0;
@@ -928,7 +928,7 @@
 
         var update_mood_from_context = function(participants){
             // Receive id, date pair
-            d3.dsv(";", "http://localhost:9001/data/mood_sampled.csv").then(function(data) {
+            d3.dsv(";", "https://chunthebear.github.io/covid19-mood-vis//data/mood_sampled.csv").then(function(data) {
                 let num = 0;
                 let valence = 0;
                 let arousal = 0;
