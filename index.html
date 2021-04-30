@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+    <style>
+        body {
+            zoom: 100%;
+            }
+        .vis_cols {display: flex;}
+        .mood_col {
+            flex: 5%;
+            border-style: solid;
+            border-radius: 10px;
+            border-color: #b1b1b1;
+        }
+        .var_col {
+            flex: 115%;
+            /* max-width: 1000px; */
+            border-style: solid;
+            border-radius: 10px;
+            border-color: #b1b1b1;
+            font-size: 0.9em;
+        }
+
+        /* .var_col div {
+            border-style: solid;
+            border-radius: 0px;
+            border-color: #dadada;
+        } */
+
+        .mood_col svg {
+	        position: absolute;
+            transition: fill 0.4s ease;
+            padding: 30px;
+        }
+        div.screen div {
+	        position: absolute;
+        }
+        body {
+            font-family: Arial;
+            
+            /* font-size: small; */
+        }
+        /* :disabled {} */
+
+        select:disabled {
+            -webkit-appearance: none;
+            opacity: 1;
+            background-color:white; 
+            color:black
+        }
+
+        .ui-checkboxradio-label.ui-corner-all.ui-button.ui-widget.ui-checkboxradio-checked.ui-state-active {
+            background: #575757 !important;
+            border: #929292 !important;
+        }
+        .ui-widget {
+            font-family: Arial;
+            font-size: 0.8em;
+        }
+        g line{
+            stroke: #696969;
+            }
+
+        g path{
+            stroke: #696969;
+            }
+
+        g text{
+            fill: #696969;
+            }  
+
+        #overlay {
+            position: absolute; /* Sit on top of the page content */
+            display: none; 
+            width: 700px; /* Full width (cover the whole page) */
+            height: 350px; /* Full height (cover the whole page) */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 0, 0, 0.5); /* Black background with opacity */
+            z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+            cursor: pointer; /* Add a pointer on hover */
+        }
+    </style>
+
+</head>
+<body>
+    <span style="display:block; height: 10px;"></span>
+    <div class="vis_cols">
+
+        <span style="display:block; width: 40px;"></span>
+
+        <div class="mood_col" style="padding-left:15px;padding-top:20px;padding-bottom:20px;">
+            
+            <h2 style="color:#303030; padding: 10px;padding-left:45px;">Mood</h2>
+            
+            <span style="display:block; height: 20px;"></span>
+            <span style="display:block; width: 480px;"></span>
+
+        </div>
+
+        <span style="display:block; width: 50px;"></span>
+
+        <div class="var_col" style="padding-left: 40px;padding-top:20px;padding-bottom:20px;">
+            <h2 style="color:#303030; padding: 10px;padding-left:15px;">Variables
+                
+                <label for="correlated">Correlated</label>
+                <input type="checkbox" id="correlated" style="display: inline" onchange="update_vis(this)">
+                
+            </h2>
+
+            
+            
+            <div class="context_var">
+                
+                <div class="physical_activity" style="display: inline-block; margin:10px; ">
+                    <label for="cor_physical_activity">Physical Activity</label>
+                </div>
+                
+                <div class="sleep" style="display: inline-block; margin:10px;">
+                    <label for="cor_sleep">Sleep</label>
+                </div>
+                
+                <div class="social_contact" style="display: inline-block; margin:10px;">
+                    <label for="cor_social_contact">Social Contact</label>
+                </div>
+                
+                
+                <div class="work_changed" style="display: inline-block; margin:10px;">
+                    <label for="cor_work_changed">Work</label>
+                </div>
+
+                
+                
+
+                <!-- <select name="physical_activity" id="physical_activity"></select> -->
+            </div>
+
+            
+            <span style="display:block; height: 0px;"></span>
+            <div class="screen" style="text-align: center;">
+                
+
+                <div class="background">
+                    <div id="overlay"></div>
+
+                </div>
+
+                <div class="addition">
+
+                </div>
+
+                <div class="other_people">
+
+                </div>
+
+                <div class="person">
+
+                </div>
+
+            </div>
+            
+
+            <span style="display:block; height: 360px;"></span>
+
+            <div class="demo_var">
+                
+                <div class="sex" style="display: inline-block; margin:10px;">
+                    <label for="cor_sex">Sex</label>
+                </div>
+                
+                <div class="age" style="display: inline-block; margin:10px;">
+                    <label for="cor_age">Age</label>
+                </div>
+                
+                <div class="income" style="display: inline-block; margin:10px;">
+                    <label for="cor_income">Income</label>
+                </div>
+                
+                <div class="family_members" style="display: inline-block; margin:10px;">
+                    <label for="cor_family_members">Family Number</label>
+                </div>
+                <br>
+                <div class="residence_type" style="display: inline-block; margin:10px;">
+                    <label for="cor_residence_type">Residence Type</label>
+                </div>
+                
+                <div class="residence_rooms" style="display: inline-block; margin:10px;">
+                    <label for="cor_residence_rooms">Residence Rooms</label>
+                </div>
+                
+                <div class="open_spaces" style="display: inline-block; margin:10px;">
+                    <label for="cor_open_spaces">Open Spaces</label>
+                </div>
+                
+                <!-- <div class="covid" style="display: inline-block; margin:10px;">
+                    <label for="cor_covid">Covid Diagnosed</label>
+                </div> -->
+                <br>
+                <div class="covid_residence" style="display: inline-block; margin:10px;">
+                    <label for="cor_covid_residence">Covid in Residence</label>
+                </div>
+                
+
+            </div>
+
+        </div>
+
+        <span style="display:block; width: 40px;"></span>
+    </div>
+
+    <script>
+        // Create mood indicator using 1d size only
+        // Create mood indicator 
+        let width = 400;
+        let height = 400;
+        let length = 325;
+
+        //Create SVG elements
+        
+        let svg_axis = d3.select("div.mood_col")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                   
+
+        svg_axis.append("image")
+            .attr("style", "background-position: center center; object-fit: contain; height: 400px; position:relative;")
+            .attr("xlink:href", "http://localhost:9001/assets/mood-vis.png")
+
+        let y_scale = d3.scaleLinear()
+                  .domain([-50, 50])
+                  .range([length, 0]);
+
+        let y_axis = d3.axisLeft().scale(y_scale).tickFormat(() => "");
+
+        
+
+                    svg_axis.append("g")
+        .attr("transform", "translate(200, 37.5)")
+        .call(y_axis);
+
+        let x_scale = d3.scaleLinear()
+                  .domain([-50, 50])
+                  .range([0, length]);
+
+        let x_axis = d3.axisBottom().scale(x_scale).tickFormat(() => "");
+
+        svg_axis.append("g")
+        .attr("transform", "translate(37.5, 200)")
+        .call(x_axis);
+
+
+        let svg_cir = d3.select("div.mood_col")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+        svg_cir.append("circle")
+        .attr("id","circle")
+        // .attr("transform", "translate(190, 190)")
+        .attr("cx", "50%")
+        .attr("cy", "50%")
+        .attr("r", 10)
+        .attr('fill', 'black')
+        // .attr("stroke", "black")
+        // .attr("stroke-width", "3")
+       
+
+
+
+        
+
+    </script>
+
+    <script>
+        
+        function mouse_up(src_obj) {
+            update_vis(src_obj);
+        }
+
+        // Data processing for context
+        d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+            let physical_activity_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].physical_activity
+                if (!(physical_activity_arr.includes(option))){
+                    physical_activity_arr.push(option)
+                }
+            }
+            let sleep_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].sleep
+                if (!(sleep_arr.includes(option))){
+                    sleep_arr.push(option)
+                }
+            }
+            let work_changed_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].work_changed
+                if (!(work_changed_arr.includes(option))){
+                    work_changed_arr.push(option)
+                }
+            }
+            let social_contact_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].social_contact
+                if (!(social_contact_arr.includes(option))){
+                    social_contact_arr.push(option)
+                }
+            }
+            let all_data = [physical_activity_arr.filter(e=>e).sort(), sleep_arr.filter(e=>e).sort(), work_changed_arr.filter(e=>e).sort(), social_contact_arr.filter(e=>e).sort()]
+
+            cols = ["physical_activity", "sleep", "work_changed",  "social_contact"];
+            
+            for(i in cols){
+                let dim_name = cols[i]
+                let temp_arr = all_data[i]
+                let slt_context = d3.select("div.".concat(dim_name))
+                .append("select")
+                .attr("id", dim_name)
+                .attr("onchange", "update_vis(this)")
+                .attr("disabled", true);
+
+                // slt_context
+                // .on("change", function(d) {
+                //     let value = d3.select(this).property("value");
+                //     alert(value);
+                // });
+
+                slt_context.selectAll("option")
+                .data(temp_arr)
+                .enter()
+                    .append("option")
+                    .attr("value", function (d) { return d; })
+                    .text(function (d) { return d; });
+
+
+                if (dim_name=="work_changed"){
+                    $("#".concat(dim_name)).removeAttr("disabled");
+                    //$("#".concat(dim_name)).attr("onchange", "update_vis(this)")
+                    continue;
+                } 
+
+                // Add slider 
+                d3.select("div.".concat(dim_name))
+                .append("div")
+                .attr("id", dim_name.concat("_slider"))
+                .attr("style", "display:block; margin:10px; width:115px;margin-left: auto; margin-right: auto ")
+                .attr("onmouseup", "mouse_up(this)")
+                //.attr("onchange", "update_vis(this)")
+
+                // Modify slider
+                let s = $("#".concat(dim_name));
+                let slider = $('#'+dim_name+'_slider').slider({
+                    min: 1,
+                    max: temp_arr.length,
+                    values: [s[0].selectedIndex + 1],
+                    slide: function (e, ui) {
+                        let r = $('#'+dim_name+' option').eq(ui.values[0]-1).text();
+                        //s.trigger('change');
+                        s.val(r);
+                    }
+                });
+                
+            }
+            //console.log(data.length)
+        });
+
+        
+        
+    </script>
+
+    <script>
+        
+
+        // Data processing for demograhics
+        d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+
+            cols = ["sex", "age", "family_members",  "residence_type", "residence_rooms", "open_spaces", "income", "covid_residence"];//, "covid"];
+            
+            let sex_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].sex
+                if (!(sex_arr.includes(option))){
+                    sex_arr.push(option)
+                }
+            }
+            let age_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].age
+                if (!(age_arr.includes(option))){
+                    age_arr.push(option)
+                }
+            }
+            let family_members_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].family_members
+                if (!(family_members_arr.includes(option))){
+                    family_members_arr.push(option)
+                }
+            }
+            let residence_type_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].residence_type
+                if (!(residence_type_arr.includes(option))){
+                    residence_type_arr.push(option)
+                }
+            }
+            let residence_rooms_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].residence_rooms
+                if (!(residence_rooms_arr.includes(option))){
+                    residence_rooms_arr.push(option)
+                }
+            }
+            let open_spaces_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].open_spaces
+                if (!(open_spaces_arr.includes(option))){
+                    open_spaces_arr.push(option)
+                }
+            }
+            let income_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].income
+                if (!(income_arr.includes(option))){
+                    income_arr.push(option)
+                }
+            }
+            let covid_residence_arr = []
+            for(j = 0; j < data.length; j++){
+                let option = data[j].covid_residence
+                if (!(covid_residence_arr.includes(option))){
+                    covid_residence_arr.push(option)
+                }
+            }
+            // let covid_arr = []
+            // for(j = 0; j < data.length; j++){
+            //     let option = data[j].covid
+            //     if (!(covid_arr.includes(option))){
+            //         covid_arr.push(option)
+            //     }
+            // }
+
+
+            let all_data = [sex_arr.filter(e=>e).sort(), age_arr.filter(e=>e).sort(), family_members_arr.filter(e=>e).sort(), residence_type_arr.filter(e=>e).sort(), residence_rooms_arr.filter(e=>e).sort(), open_spaces_arr.filter(e=>e).sort(), income_arr.filter(e=>e).sort(), covid_residence_arr.filter(e=>e).sort()]//, covid_arr.filter(e=>e).sort()]
+ 
+            
+            
+            for(i in cols){
+                let dim_name = cols[i]
+                let temp_arr = all_data[i]
+                
+                let slt_context = d3.select("div.".concat(dim_name))
+                .append("select")
+                .attr("id", dim_name)
+                .attr("onchange", "update_vis(this)")
+
+                // slt_context
+                // .on("change", function(d) {
+                //     let value = d3.select(this).property("value");
+                //     alert(value);
+                // });
+
+                slt_context.selectAll("option")
+                .data(temp_arr)
+                .enter()
+                    .append("option")
+                    .attr("value", function (d) { return d; })
+                    .text(function (d) { return d; });
+
+
+                if (dim_name=="age" || dim_name=="income" || dim_name=="family_members" || dim_name=="residence_rooms"){
+                    $("#".concat(dim_name)).attr("disabled", true);
+                    //$("#".concat(dim_name)).removeAttr("onchange");
+                    
+                    // Add slider 
+                    d3.select("div.".concat(dim_name))
+                    .append("div")
+                    .attr("id", dim_name.concat("_slider"))
+                    .attr("style", "display:block; margin:10px; width:115px;margin-left: auto; margin-right: auto ")
+                    .attr("onmouseup", "mouse_up(this)")
+                    //.attr("onchange", "update_vis(this)")
+
+                    // Modify slider
+                    let s = $("#".concat(dim_name));
+                    let slider = $('#'+dim_name+'_slider').slider({
+                        min: 1,
+                        max: temp_arr.length,
+                        values: [s[0].selectedIndex + 1],
+                        slide: function (e, ui) {
+                            let r = $('#'+dim_name+' option').eq(ui.values[0]-1).text();
+                            //s.trigger('change');
+                            s.val(r);
+                        }
+                    });
+
+                }
+                
+            }
+
+            
+
+            
+            //console.log(data.length)
+    });
+        
+    </script>
+
+    <script>
+
+        d3.select("div.screen").select("div.background")
+            .append("img")
+            .attr("style", "background-position: center 40%; object-fit: cover; width: 700px; height: 350px;")
+            .attr("src", "http://localhost:9001/assets/apartment-3-room.jpg")
+                    
+        d3.select("div.screen").select("div.person")
+            .append("img")
+            .attr("style", "background-position: center center; object-fit: contain; height: 100px; position:relative; left:320px; top:140px;")
+            .attr("src", "http://localhost:9001/assets/context/person.png")
+
+        d3.select("div.screen").select("div.addition")
+            .append("img")
+            .attr("style", "background-position: center center; object-fit: contain; height: 200px; position:relative; left:300px; top:150px;")
+            .attr("src", "http://localhost:9001/assets/balcony-flipped.png")
+
+    </script>
+
+    <script>
+        // show / hide animations
+        var show = function(src){
+            $("div.person > img").attr("src", src);
+            setTimeout(hide, 3000); //  milliseconds
+        };
+
+        var hide = function(){
+            $("div.person > img").attr("src", "http://localhost:9001/assets/context/person.png");
+        };
+
+
+
+        // Function to listen to changes in variables
+        var update_vis = function(src_obj){
+
+            let context_cols = ["physical_activity", "sleep", "work_changed",  "social_contact"];
+            let demo_cols = ["sex", "age", "family_members",  "residence_type", "residence_rooms", "open_spaces", "income", "covid_residence"];//, "covid"];
+            let cols = context_cols.concat(demo_cols);
+
+            // If corrlated, update UI
+            if(src_obj.id=="correlated") {
+                if (document.getElementById("correlated").checked){
+                    for (i=0; i<cols.length; i++){
+                        let temp_str = '<input type="checkbox" id="cor_' + cols[i] + '">';
+                        $("."+cols[i]).append(temp_str);
+                        $("#cor_"+cols[i]).checkboxradio();
+                    }
+
+                } else{
+                    for (i=0; i<cols.length; i++){
+                        $("#cor_"+cols[i]).remove()
+                    }
+                }
+                return;
+            }
+            
+            let caller = src_obj.id.replace("_slider", "");
+            //console.log(caller);
+
+            // demo vars
+            let physical_activity = document.querySelector("#physical_activity").value
+            let sleep = document.querySelector("#sleep").value
+            let work_changed = document.querySelector("#work_changed").value
+            let social_contact = document.querySelector("#social_contact").value
+
+            if (caller=="physical_activity"){
+                if (physical_activity=="0-2") show("http://localhost:9001/assets/context/running-slowerer.gif");
+                else if (physical_activity=="2-4") show("http://localhost:9001/assets/context/running-slower.gif");
+                else if (physical_activity=="4-6") show("http://localhost:9001/assets/context/running.gif");
+                else if (physical_activity=="6-8") show("http://localhost:9001/assets/context/running-faster.gif");
+                else if (physical_activity=="8+") show("http://localhost:9001/assets/context/running-fasterer.gif");
+            }
+            else if (caller=="sleep"){
+                if (sleep=="0_lot_less" || sleep=="1_less") show("http://localhost:9001/assets/context/sleeping-less.png");
+                else if (sleep=="2_same") show("http://localhost:9001/assets/context/sleeping.gif");
+                else if (sleep=="4_lot_more" || sleep=="3_more") show("http://localhost:9001/assets/context/sleeping-more.gif");
+            }
+            else if (caller=="work_changed"){
+                if (work_changed =="reduce") show("http://localhost:9001/assets/context/work-slower.gif");
+                else if (work_changed =="no_change") show("http://localhost:9001/assets/context/work.gif");
+                else if (work_changed =="increase") show("http://localhost:9001/assets/context/work-faster.gif");
+            }
+            else if (caller=="social_contact"){
+                if (social_contact=="1_less") show("http://localhost:9001/assets/context/socialcontact-slower.gif");
+                else if (social_contact=="2_same") show("http://localhost:9001/assets/context/socialcontact.gif");
+                else if (social_contact=="3_more") show("http://localhost:9001/assets/context/socialcontact-faster.gif");
+            }
+
+            // context vars
+            let sex = document.querySelector("#sex").value
+            let age = document.querySelector("#age").value
+            let family_members = document.querySelector("#family_members").value
+            let residence_type = document.querySelector("#residence_type").value
+            let residence_rooms = document.querySelector("#residence_rooms").value
+            let open_spaces = document.querySelector("#open_spaces").value
+            if (residence_type=="apartment"&&residence_rooms==1){
+                $("div.background > img").attr("src","http://localhost:9001/assets/apartment-1-room.jpg");
+            }
+            else if (residence_type=="apartment"&&residence_rooms==2){
+                $("div.background > img").attr("src","http://localhost:9001/assets/apartment-2-room.jpg");
+            }
+            else if (residence_type=="apartment"&&residence_rooms==3 || residence_type=="apartment"&&residence_rooms=="3+"){
+                $("div.background > img").attr("src","http://localhost:9001/assets/apartment-3-room.jpg");
+            }
+            else if (residence_type=="house"&& (residence_rooms==1||residence_rooms==2)){
+                if (open_spaces=="yard,balcony" || open_spaces=="yard") {
+                    $("div.background > img").attr("src","http://localhost:9001/assets/house-1-2-room-yard.jpg");
+                } else {
+                    $("div.background > img").attr("src","http://localhost:9001/assets/house-1-2-room.jpg");
+                }
+            }
+            else if (residence_type=="house"&& (residence_rooms==3||residence_rooms=="3+")){
+                if (open_spaces=="yard,balcony" || open_spaces=="yard") {
+                    $("div.background > img").attr("src","http://localhost:9001/assets/house-3-room-yard.jpg");
+                } else {
+                    $("div.background > img").attr("src","http://localhost:9001/assets/house-3-room.jpg");
+                }
+            }
+            else if (residence_type=="other"){
+                $("div.background > img").attr("src","http://localhost:9001/assets/milky-way.gif");
+            }
+            
+            if (open_spaces=="balcony"){
+                $("div.addition > img").attr("src","http://localhost:9001/assets/balcony-flipped.png");
+            }
+            else if (open_spaces=="yard,balcony"){
+                $("div.addition > img").attr("src","http://localhost:9001/assets/balcony-flipped.png");
+
+            }
+            else if (open_spaces=="no" || open_spaces=="other" || open_spaces=="yard" ){
+                $("div.addition > img").attr("src","data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=");
+            }
+            let income = document.querySelector("#income").value
+            //let covid = document.querySelector("#covid").value
+            let covid_residence = document.querySelector("#covid_residence").value
+            if (covid_residence=="diagnosed"){
+                // $("div.backgrond").css({
+                //     'background-color': 'red',
+                //     'opacity': 0.5
+                // });
+                document.getElementById("overlay").style.display = "block";
+
+            }
+            else{
+                document.getElementById("overlay").style.display = "none";
+            }
+
+            let selected = [] 
+
+            if (document.getElementById("correlated").checked == false){
+
+                if (caller == "sex"){
+                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (sex==data[j].sex){
+                                selected.push(parseInt(data[j].id))
+                            }
+                        } 
+                    });
+                    update_mood_from_demo(selected);
+                }
+                else if (caller == "age"){
+                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (age==data[j].age){
+                                selected.push(parseInt(data[j].id))
+                            }
+                        } 
+                    });
+                    update_mood_from_demo(selected);
+                }
+                else if (caller == "family_members"){
+                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (family_members==data[j].family_members){
+                                selected.push(parseInt(data[j].id))
+                            }
+                        } 
+                    });
+                    update_mood_from_demo(selected);
+                }
+                else if (caller == "residence_type"){
+                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (residence_type==data[j].residence_type){
+                                selected.push(parseInt(data[j].id))
+                            }
+                        } 
+                    });
+                    update_mood_from_demo(selected);
+                }
+                else if (caller == "residence_rooms"){
+                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (residence_rooms==data[j].residence_rooms){
+                                selected.push(parseInt(data[j].id))
+                            }
+                        } 
+                    });
+                    update_mood_from_demo(selected);
+                }
+                else if (caller == "open_spaces"){
+                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (open_spaces==data[j].open_spaces){
+                                selected.push(parseInt(data[j].id))
+                            }
+                        } 
+                    });
+                    update_mood_from_demo(selected);
+                }
+                else if (caller == "income"){
+                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (income==data[j].income){
+                                selected.push(parseInt(data[j].id))
+                            }
+                        } 
+                    });
+                    update_mood_from_demo(selected);
+                }
+                else if (caller == "covid_residence"){
+                    d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (covid_residence==data[j].covid_residence){
+                                selected.push(parseInt(data[j].id))
+                            }
+                        } 
+                    });
+                    update_mood_from_demo(selected);
+                }
+
+
+                // Selected is different here! 
+                //select = [[]]
+                else if (caller == "physical_activity"){
+                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (physical_activity==data[j].physical_activity){
+                                let id = parseInt(data[j].id)
+                                let date = data[j].date
+                                selected.push([id, date]);
+                            }
+                        }
+                    });
+                    update_mood_from_context(selected);
+                }
+                else if (caller == "sleep"){
+                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (sleep==data[j].sleep){
+                                let id = parseInt(data[j].id)
+                                let date = data[j].date
+                                selected.push([id, date]);
+                            }
+                        }
+                    });
+                    update_mood_from_context(selected);
+                }
+                else if (caller == "work_changed"){
+                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (work_changed==data[j].work_changed){
+                                let id = parseInt(data[j].id)
+                                let date = data[j].date
+                                selected.push([id, date]);
+                            }
+                        }
+                    });
+                    update_mood_from_context(selected);
+                }
+                else if (caller == "social_contact"){
+                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+                        for(j = 0; j < data.length; j++){
+                            if (social_contact==data[j].social_contact){
+                                let id = parseInt(data[j].id)
+                                let date = data[j].date
+                                selected.push([id, date]);
+                            }
+                        }
+                    });
+                    update_mood_from_context(selected);
+                }
+
+                
+
+            } else {
+                // correlated vars
+
+                let context_vars_selected = []
+                let demo_vars_selected = []
+
+                for (i=0; i<context_cols.length; i++){
+                    if (document.getElementById("cor_"+context_cols[i]).checked){
+                        context_vars_selected.push(context_cols[i])
+                    }
+                }
+
+                for (i=0; i<demo_cols.length; i++){
+                    
+                    if (document.getElementById("cor_"+demo_cols[i]).checked){
+                        demo_vars_selected.push(demo_cols[i])
+                    }
+                }
+                
+            
+                d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+
+                    loop1: 
+                    for(j = 0; j < data.length; j++){
+                        loop2:
+                        for(i=0; i<demo_vars_selected.length; i++){
+                            let curr_dim = demo_vars_selected[i]
+                            if (document.querySelector("#"+curr_dim).value == data[j][curr_dim]){
+                                continue;
+                            } else{
+                                //console.log("not selected")
+                                //console.log(data[j].id)
+                                continue loop1;
+                            }
+                            
+                        }
+                        selected.push(parseInt(data[j].id))
+                    }
+                    //console.log(selected)
+
+                    if(selected.length==0){
+                        alert("Corresponding data does not exist! Please choose other values.");
+                        return;
+                    }
+                    if (context_vars_selected.length == 0){
+                        update_mood_from_demo(selected);
+                    }
+
+                }) 
+
+                if (!context_vars_selected.length == 0){                
+                    let filtered_selected = []
+                    d3.dsv(";", "http://localhost:9001/data/context.csv").then(function(data) {
+
+                        loop1: 
+                        for(j = 0; j < data.length; j++){
+                            loop2:
+                            for(i=0; i<context_vars_selected.length; i++){
+                                let curr_dim = context_vars_selected[i]
+                                
+                                if (selected.includes(parseInt(data[j].id))){
+                                
+                                    if(document.querySelector("#"+curr_dim).value == data[j][curr_dim]){
+                                        // console.log("kept")
+                                        // console.log(data[j].id)
+                                        // console.log(document.querySelector("#"+curr_dim).value)   
+                                        // console.log(data[j][curr_dim] ) 
+                                        let id = parseInt(data[j].id)
+                                        let date = data[j].date
+                                        filtered_selected.push([id, date]);
+                                        continue;
+                                    } else{
+                                        continue loop1;
+                                    }
+                                }
+                            }
+                        }
+                        // console.log(filtered_selected)
+                        if(filtered_selected.length==0){
+                            alert("Corresponding data does not exist! Please choose other values.");
+                            return;
+                        }
+                        update_mood_from_context(filtered_selected);
+                    });
+                }
+            }
+        }
+
+        
+    </script>
+
+    <script>
+        var update_mood_from_demo = function(participants){
+            d3.dsv(";", "http://localhost:9001/data/participants_sampled.csv").then(function(data) {
+                let num = participants.length;
+                let valence = 0;
+                let arousal = 0;
+                for(i = 0; i < num; i++){
+                    for(j = 0; j < data.length; j++){
+                        if(parseInt(participants[i])==parseInt(data[j].id)){
+                            //console.log(participants[i])
+                            //console.log(data[j].id)
+                            valence = valence + parseInt(data[j].valence);
+                            // valence = valence + parseInt(data[j].valence);
+                            
+                        }
+                    }
+                }
+                let ave_valence = (valence / num) + 50;
+                //console.log(ave_valence);
+                update_mood_circle(ave_valence);
+            });
+
+        }
+
+
+        // function pick(collection, attributes) {
+        //     return _(attributes)
+        //     .map(function(attr) { return _.map(collection, attr); })
+        //     .flatten()
+        //     .value();
+        // }
+
+
+        var update_mood_from_context = function(participants){
+            // Receive id, date pair
+            d3.dsv(";", "http://localhost:9001/data/mood_sampled.csv").then(function(data) {
+                let num = 0;
+                let valence = 0;
+                let arousal = 0;
+
+                
+                let participants_id = participants.map(function(participant) {
+                    return parseInt(participant[0]);
+                })
+                
+
+                for(i = 0; i < participants_id.length; i++){
+                    for(j = 0; j < data.length; j++){
+                        if(participants_id[i]==parseInt(data[j].id)){
+                            
+                            let time = data[j].answer_timestamp;
+                            time = new Date(time)
+                            let date_check = moment(time).format("YYYY-MM-DD");
+
+                            // Context info is updated every 7 days with info from previous week
+                            // So date_to is the given date, and we go back 7 dates to find date_from
+                            let date_to = new Date(participants[i][1])
+                            date_to =  moment(date_to).format("YYYY-MM-DD");
+
+                            
+                            let date_from = moment(date_to).subtract(7, 'days').format("YYYY-MM-DD");
+                            
+                            if(moment(date_check).isBetween(date_from, date_to)){
+                                //console.log(date_check)
+                                //console.log(date_from)
+                                //console.log(date_to)
+                                valence = valence + parseInt(data[j].valence);
+                                // if (!isNaN(data[j].arousal))
+                                arousal = arousal + parseInt(data[j].arousal);
+                                num = num+1
+                                
+                            }
+                        }
+                    }
+                }
+
+                //console.log(arousal)
+                let ave_valence = (valence / num) + 50;
+                let ave_arousal = arousal / num;
+                //console.log(ave_arousal)
+                
+                update_mood_circle(ave_valence, ave_arousal);
+            })
+        }
+        var update_mood_circle = function(valence, arousal){
+            if (typeof(arousal) == "undefined") arousal = 50
+            console.log(valence, arousal);
+            valence = (valence * 80 / 100) + 10;
+            arousal = (arousal * 80 / 100) + 10;
+            // let colour = "";
+            // if (value<0){
+            //     colour = "#212cfc";
+            // } else{
+            //     colour = "#fce621";
+            // }
+            // let scale = Math.PI*100*100 / 50
+            // let area = Math.abs(value) * scale
+            // let radius = Math.sqrt(area / Math.PI) 
+            $("#circle").animate({
+                cx: valence+"%",
+                cy: arousal+"%"
+                //svgFill: colour
+            });
+            // // .attr("r", radius)
+            // $("#circle").attr('fill', colour);
+
+            
+            
+        }
+        
+    </script>
+
+    <script>
+        $( function() {
+            $( "#correlated" ).checkboxradio();
+        } );
+    </script>
+
+</body>
+</html>
