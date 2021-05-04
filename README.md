@@ -1,5 +1,6 @@
 # COVID19 Mood Visualization
 ## Mood visualisation of people in the COVID19 pandemic. **[See it here!](https://chunthebear.github.io/covid19-mood-vis/)** 
+## Read the original research paper **[here](https://www.nature.com/articles/s41597-020-00700-1)**! 
 
 ### Author's notes:
 Existing visualizations about COVID19 are mostly on cases, infection rates, and impacts on the economy and climate, but almost none on the emotional impact. I want the audience to feel emotionally connected to my visualization and feel good in this pandemic world, so I did a non-conventional visualization, showing mood changes based on different demographics, and contextual variables such as physical activity, sleep, social contact, and work. There are a few studies conducted on this topic which contributed the data including demographics, weekly contextual information, and daily mood changes. 
